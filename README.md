@@ -971,6 +971,7 @@ WHERE id_libro in (
 # Subconsultas any all
 
 any ==
+
 all <>
 
 ```sql
