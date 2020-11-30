@@ -1,12 +1,20 @@
 # Introduccion
 
-SQL server es un motor de base de datos creado por microsoft,aprnder y a manejar sql server y aprender lenguajes para manejar base de datos sql. 
+Documentacion en base del curso 
+
+```
+    Curso de SQL Server - deividcoptero Programación
+    https://www.youtube.com/watch?v=kxgsBHMjSgE&list=PL6hPvfzEEMDaU4aiS389oXamdN8sip856
+```
+
+SQL server es un motor de base de datos creado por microsoft, aprender y a manejar sql server y aprender lenguajes para manejar base de datos sql. 
 
 ***DBO*** = base de datos.propietario.objeto
 
 # Creacion y elimnacion de una bd
 
 Manera grafica
+
 ![prueba](Img/01_creacion_db.png)
 
 Manera script
@@ -646,9 +654,11 @@ ORDER BY id_usuario DESC;
 C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\
 
 - backup
+
 ![](Img/03_backups.png)
 
 - restore
+
 ![](Img/04_restore.png)
 
 # Llaves foreneas
