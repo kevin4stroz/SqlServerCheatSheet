@@ -7,7 +7,7 @@ SQL server es un motor de base de datos creado por microsoft,aprnder y a manejar
 # Creacion y elimnacion de una bd
 
 Manera grafica
-![](img/01_creacion_db.png)
+![prueba](img/01_creacion_db.png)
 
 Manera script
 ```sql
