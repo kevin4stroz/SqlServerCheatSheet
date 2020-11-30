@@ -7,7 +7,7 @@ SQL server es un motor de base de datos creado por microsoft,aprnder y a manejar
 # Creacion y elimnacion de una bd
 
 Manera grafica
-![prueba](img/01_creacion_db.png)
+![prueba](Img/01_creacion_db.png)
 
 Manera script
 ```sql
@@ -22,7 +22,7 @@ drop database [legislacion]
 
 # Tipo de datos
 
-![](img/02_tipo_datos.png)
+![](Img/02_tipo_datos.png)
 
 # Creacion y eliminacion de tablas
 
@@ -646,14 +646,14 @@ ORDER BY id_usuario DESC;
 C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\
 
 - backup
-![](img/03_backups.png)
+![](Img/03_backups.png)
 
 - restore
-![](img/04_restore.png)
+![](Img/04_restore.png)
 
 # Llaves foreneas
 
-![](img/05_ejemplo.png)
+![](Img/05_ejemplo.png)
 
 ```sql
 
@@ -765,7 +765,7 @@ VALUES(2008, 'jorge@gmail.com', 19);
 
 # JOINS
 
-![](img/sqljoin.jpeg)
+![](Img/sqljoin.jpeg)
 
 # Inner Join
 
