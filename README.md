@@ -1022,60 +1022,315 @@ SELECT nombre FROM usuarios;
 
 # Comando GO
 
-```sql
+Delimintar consultas de sentencias
 
+```sql
+grupo_de_sentencias
+
+go
+
+grupo_de_sentencias
 ```
 
 # Vistas
 
+tablas virtuales creadas a partir de una consulta, 
+
+```sql
+CREATE VIEW UsuarioTemp as
+/*Sentencias SQL*/
+select nombre from usuarios;
+
+SELECT * FROM UsuarioTemp:
+SELECT COUNT(nombre) FROM UsuarioTemp;
+```
+
 # Cifrado de vistas
+
+```sql
+SELECT * FROM UsuarioTemp;
+sp_helptext UsuarioTemp;
+
+CREATE VIEW Usuario2Temp WITH ENCRYPTION AS
+select nombre from usuarios;
+
+sp_helptext Usuario2Temp;
+```
 
 # Eliminar vistas
 
-# Update & delate con vistas
+```sql
+DROP VIEW Usuario2Temp;
+```
+
+# Update & delete con vistas
+
+se ve reflejado los cambios de las vistas en las tablas fuente
+
+```sql
+SELECT * FROM usuarios;
+
+CREATE VIEW Mujeres AS
+SELECT * FROM usuarios WHERE sexo = 'F';
+
+SELECT * FROM Mujeres order by edad;
+
+UPDATE Mujeres set tipo_usuario = 'Root'
+WHERE edad > 25;
+
+DELETE FROM Mujeres;
+```
 
 # Sentencia Witch Check Option en vistas
 
-# Continuacion del curso
+Condicionar las vista y la modificacion a los datos
 
---- 
+```sql
+CREATE VIEW copy AS
+SELECT * FROM usuarios WHERE sexo = 'M'
+WITH CHECK OPTION;
 
-# Vistas Modificadas
+SELECT * FROM copy;
 
+DELETE FROM copy;
+/*se limita a la condicion de borrado*/
+```
+
+# Alteracion de vistas
+
+```sql
+CREATE VIEW copy WITH ENCRYPTION AS
+SELECT * FROM usuarios;
+
+ALTER VIEW copy
+AS SELECT * FROM usuarios;
+
+ALTER VIEW copy
+AS SELECT * FROM usuarios WHERE edad < 20;
+```
 # CASE
+
+```sql
+SELECT id_usuario, usuario, nombre, edad =
+CASE edad
+	WHEN 17 THEN 'Menor'
+	WHEN 18 THEN 'Menor'
+	WHEN 19 THEN 'Mayor'
+	WHEN edad >= 20 THEN 'Mayor'
+END
+-- retorna un valor nulo
+FROM usuarios;
+```
 
 # IF
 
+```sql
+if exist (select * from usuarios where edad <= 18)
+    select * from usuarios where edad <= 18
+else
+    select 'No hay menores de 18 años' 
+
+if exists (select * from usuarios where edad <= 8)
+    select * from usuarios where edad <= 8
+else
+    select 'No hay menores de 8 años' 
+```
+
 # Variables
+
+```sql
+declare @VarSexo varchar(20);
+declare @VarEdad int;
+
+set @VarSexo = 'M';
+set @VarEdad = 18
+
+SELECT * FROM usuarios WHERE sexo = @VarSexo AND edad >= @VarEdad;
+
+----
+
+declare @sumatoriaHombre int;
+declare @sumatoriaMujer int;
+
+set @sumatoriaHombre = (SELECT SUM(edad) FROM usuarios WHERE sexo = 'M')
+set @sumatoriaMujer = (SELECT SUM(edad) FROM usuarios WHERE sexo = 'F')}
+
+if (@sumatoriaHombre > @sumatoriaMujer)
+    begin
+        select 'La sumatoria de los hombres es mayor';
+        select @sumatoriaHombre;
+    end
+else
+    begin
+        select 'La sumatoria de los mujeres es mayor';
+        select @sumatoriaMujer
+    end
+```
 
 # Procedimientos almacenados
 
+Tipos de procedimientos
+
+- Del sistema: estan almacenadas en la base de datos de master y llevan el prefijo sp_
+- locales : los crea el usuarios
+- temporales: pueden ser locales y los nombres empiezan con #
+- extendidos: seimplementan como vinculas dinamicos de dll y se ejecutan de manera externa
+
+
 # Procedimientos almacenados Creacion y ejecucion
+
+```sql
+CREATE PROC NombreProcedimiento AS
+select nombre, edad, sexo from usuarios where sexo = 'F';
+
+exec NombreProcedimiento
+```
 
 # Procedimientos almacenados eliminacion
 
+```sql
+if object_id('NombreProcedimiento')
+    drop procedure NombreProcedimiento
+else
+    select 'no existe'
+```
+
 # Procedimientos almacenados Parametros Entrada
+
+```sql
+
+CREATE PROCEDURE SELECCION
+@edad int = 18,
+@sexo varchar(20) = 'F'
+as
+begin
+    select * from  usuarios edad > @edad and sexo = @sexo
+end
+
+exec SELECCION 18, 'M'
+```
 
 # Procedimientos almacenados Parametros Salida
 
+```sql
+CREATE PROCEDURE SELECCION
+@edad int = 18,
+@sexo varchar(20) = 'F',
+@count int output
+as
+begin
+    set @count = (select count(nombre) from  usuarios edad > @edad and sexo = @sexo)
+end
+
+declare @total int;
+exec SELECCION 18, 'M', @total output
+select @total
+```
+
 # Procedimientos almacenados Return
+
+```sql
+CREATE PROC SELECCION
+@edad int,
+@sexo varchar(20)
+as 
+begin
+    if(@edad is null) or (@sexo is null)
+        return 0
+    else
+        return 1
+end
+
+declare @retorno int;
+exec @retorno = seleccion null, null;
+select @retorno;
+
+exec @retorno = seleccion 18, 'M';
+select @retorno;
+```
 
 # Procedimientos almacenados Info
 
+```sql
+sp_help
+sp_helptext seleccion
+sp_stored_procedures
+
+sp_depends seleccion
+
+select * from sysobjects;
+```
+
 # Procedimientos almacenados Encrypt
 
-# Procedimientos almacenados Anidacion
+```sql
+CREATE PROC SELECCION
+@edad int,
+@sexo varchar(20)
+WITH encryption
+as 
+begin
+    if(@edad is null) or (@sexo is null)
+        return 0
+    else
+        return 1
+end
 
-# Triggers
+declare @retorno int;
+exec @retorno = seleccion null, null;
+select @retorno;
+
+exec @retorno = seleccion 18, 'M';
+select @retorno;
+
+sp_helptext seleccion;
+```
 
 # Triggers Insert
 
+```sql
+CREATE TRIGGER nombreTrigger
+on Tabla
+for INSERT
+AS
+BEGIN
+    -- SETENCIAS
+END
+```
+
 # Triggers Update
+
+```sql
+CREATE TRIGGER nombreTrigger
+on Tabla
+for UPDATE
+AS
+BEGIN
+    -- SETENCIAS
+END
+```
 
 # Triggers Delete
 
+```sql
+CREATE TRIGGER nombreTrigger
+on Tabla
+for DELETE
+AS
+BEGIN
+    -- SETENCIAS
+END
+```
+
 # Triggers Habilitar y deshabilitar
 
+```sql
+    ALTER TABLE nombreTabla
+    disable TRIGGER nombreTrigger;
+
+    ALTER TABLE nombreTabla
+    enable TRIGGER nombreTrigger;
+```
 
 # permisos
 
@@ -1089,7 +1344,7 @@ go
 use AdventureWorks
 go 
 
-CreateuserAsistenteVentas from loginAsistenteVentas
+Create user AsistenteVentas from loginAsistenteVentas
 go
 
 Grant Select, Update, Insert on Schema::Sales to AsistenteVentas 
